@@ -61,19 +61,19 @@ async def get_current_user(
             settings.JWT_ALGORITHM
         )
         
-        user_id: str = payload.get("sub")
-        if user_id is None:
+        user_id_str = payload.get("sub")
+        if user_id_str is None:
             logger.warning("Token missing 'sub' claim")
             raise credentials_exception
         
         # Get user from database
         result = await db.execute(
-            select(User).where(User.id == int(user_id))
+            select(User).where(User.id == int(user_id_str))
         )
         user = result.scalar_one_or_none()
         
         if user is None:
-            logger.warning(f"User not found for token: {user_id}")
+            logger.warning(f"User not found for token: {user_id_str}")
             raise credentials_exception
         
         return UserResponse.model_validate(user)

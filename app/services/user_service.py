@@ -99,7 +99,7 @@ class UserService:
         
         # Count total users
         count_result = await self.db.execute(select(func.count(User.id)))
-        total = count_result.scalar()
+        total = count_result.scalar() or 0
         
         # Get users for current page
         result = await self.db.execute(
@@ -114,7 +114,7 @@ class UserService:
         user_responses = [UserResponse.model_validate(user) for user in users]
         
         # Calculate pagination metadata
-        total_pages = (total + pagination.page_size - 1) // pagination.page_size
+        total_pages = (total + pagination.page_size - 1) // pagination.page_size if total > 0 else 0
         has_next = pagination.page < total_pages
         has_previous = pagination.page > 1
         
