@@ -7,7 +7,7 @@ license = "MIT"
 readme = "README.md"
 
 [tool.poetry.dependencies]
-python = "^3.11"
+python = "^3.12"
 
 # Web Framework
 fastapi = "^0.104.1"
@@ -37,8 +37,8 @@ httpx = "^0.25.2"
 # Monitoring
 prometheus-fastapi-instrumentator = "^6.1.0"
 
-# Common library (local)
-gravity-common = {path = "../common-library", develop = true}
+# Common library from GitHub
+gravity-common = {git = "https://github.com/Shakour-Data/gravity-common.git", tag = "v1.0.2"}
 
 [tool.poetry.group.dev.dependencies]
 pytest = "^7.4.3"
