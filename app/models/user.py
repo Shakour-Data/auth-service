@@ -4,9 +4,10 @@ SQLAlchemy models for Auth Service.
 Database models representing users, roles, and refresh tokens.
 """
 
-from sqlalchemy import Column, Integer, String, Boolean, DateTime, ForeignKey, Text, JSON
-from sqlalchemy.orm import relationship
-from sqlalchemy.sql import func
+from datetime import datetime
+from typing import Optional, List
+from sqlalchemy import Integer, String, Boolean, DateTime, ForeignKey, Text, JSON, func
+from sqlalchemy.orm import Mapped, mapped_column, relationship
 from gravity_common.database import Base
 
 
@@ -20,25 +21,25 @@ class User(Base):
     
     __tablename__ = "users"
     
-    id = Column(Integer, primary_key=True, index=True, autoincrement=True)
-    email = Column(String(255), unique=True, index=True, nullable=False)
-    hashed_password = Column(String(255), nullable=False)
-    first_name = Column(String(100), nullable=True)
-    last_name = Column(String(100), nullable=True)
-    is_active = Column(Boolean, default=True, nullable=False)
-    is_superuser = Column(Boolean, default=False, nullable=False)
+    id: Mapped[int] = mapped_column(Integer, primary_key=True, index=True, autoincrement=True)
+    email: Mapped[str] = mapped_column(String(255), unique=True, index=True)
+    hashed_password: Mapped[str] = mapped_column(String(255))
+    first_name: Mapped[Optional[str]] = mapped_column(String(100), nullable=True)
+    last_name: Mapped[Optional[str]] = mapped_column(String(100), nullable=True)
+    is_active: Mapped[bool] = mapped_column(Boolean, default=True)
+    is_superuser: Mapped[bool] = mapped_column(Boolean, default=False)
     
     # Foreign key to roles
-    role_id = Column(Integer, ForeignKey("roles.id"), nullable=True)
+    role_id: Mapped[Optional[int]] = mapped_column(Integer, ForeignKey("roles.id"), nullable=True)
     
     # Timestamps
-    created_at = Column(DateTime, server_default=func.now(), nullable=False)
-    updated_at = Column(DateTime, onupdate=func.now(), nullable=True)
-    last_login = Column(DateTime, nullable=True)
+    created_at: Mapped[datetime] = mapped_column(DateTime, server_default=func.now())
+    updated_at: Mapped[Optional[datetime]] = mapped_column(DateTime, onupdate=func.now(), nullable=True)
+    last_login: Mapped[Optional[datetime]] = mapped_column(DateTime, nullable=True)
     
     # Relationships
-    role = relationship("Role", back_populates="users")
-    refresh_tokens = relationship("RefreshToken", back_populates="user", cascade="all, delete-orphan")
+    role: Mapped[Optional["Role"]] = relationship("Role", back_populates="users")
+    refresh_tokens: Mapped[List["RefreshToken"]] = relationship("RefreshToken", back_populates="user", cascade="all, delete-orphan")
     
     def __repr__(self) -> str:
         return f"<User(id={self.id}, email='{self.email}')>"
@@ -54,17 +55,17 @@ class Role(Base):
     
     __tablename__ = "roles"
     
-    id = Column(Integer, primary_key=True, index=True, autoincrement=True)
-    name = Column(String(50), unique=True, nullable=False, index=True)
-    description = Column(Text, nullable=True)
-    permissions = Column(JSON, default=list, nullable=False)  # List of permission strings
+    id: Mapped[int] = mapped_column(Integer, primary_key=True, index=True, autoincrement=True)
+    name: Mapped[str] = mapped_column(String(50), unique=True, index=True)
+    description: Mapped[Optional[str]] = mapped_column(Text, nullable=True)
+    permissions: Mapped[list] = mapped_column(JSON, default=list)  # List of permission strings
     
     # Timestamps
-    created_at = Column(DateTime, server_default=func.now(), nullable=False)
-    updated_at = Column(DateTime, onupdate=func.now(), nullable=True)
+    created_at: Mapped[datetime] = mapped_column(DateTime, server_default=func.now())
+    updated_at: Mapped[Optional[datetime]] = mapped_column(DateTime, onupdate=func.now(), nullable=True)
     
     # Relationships
-    users = relationship("User", back_populates="role")
+    users: Mapped[List["User"]] = relationship("User", back_populates="role")
     
     def __repr__(self) -> str:
         return f"<Role(id={self.id}, name='{self.name}')>"
@@ -80,17 +81,17 @@ class RefreshToken(Base):
     
     __tablename__ = "refresh_tokens"
     
-    id = Column(Integer, primary_key=True, index=True, autoincrement=True)
-    user_id = Column(Integer, ForeignKey("users.id", ondelete="CASCADE"), nullable=False)
-    token_hash = Column(String(255), unique=True, nullable=False, index=True)
-    expires_at = Column(DateTime, nullable=False)
-    is_revoked = Column(Boolean, default=False, nullable=False)
+    id: Mapped[int] = mapped_column(Integer, primary_key=True, index=True, autoincrement=True)
+    user_id: Mapped[int] = mapped_column(Integer, ForeignKey("users.id", ondelete="CASCADE"))
+    token_hash: Mapped[str] = mapped_column(String(255), unique=True, index=True)
+    expires_at: Mapped[datetime] = mapped_column(DateTime)
+    is_revoked: Mapped[bool] = mapped_column(Boolean, default=False)
     
     # Timestamps
-    created_at = Column(DateTime, server_default=func.now(), nullable=False)
+    created_at: Mapped[datetime] = mapped_column(DateTime, server_default=func.now())
     
     # Relationships
-    user = relationship("User", back_populates="refresh_tokens")
+    user: Mapped["User"] = relationship("User", back_populates="refresh_tokens")
     
     def __repr__(self) -> str:
         return f"<RefreshToken(id={self.id}, user_id={self.user_id})>"

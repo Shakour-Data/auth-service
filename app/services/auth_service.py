@@ -250,7 +250,10 @@ class AuthService:
                 settings.JWT_ALGORITHM
             )
             
-            user_id = int(payload.get("sub"))
+            user_id_str = payload.get("sub")
+            if not user_id_str:
+                raise UnauthorizedException(message="Invalid refresh token")
+            user_id = int(user_id_str)
             
             # Verify refresh token in database
             token_hash = generate_hash(refresh_token, "sha256")
@@ -312,6 +315,8 @@ class AuthService:
             user_email = payload.get("email")
             
             # Calculate TTL (time until expiration)
+            if not exp or not isinstance(exp, int):
+                return
             ttl = exp - int(datetime.utcnow().timestamp())
             
             if ttl > 0:
@@ -441,8 +446,6 @@ class AuthService:
         Raises:
             UnauthorizedException: If token is invalid
         """
-        logger.info("Processing password reset")
-        
         try:
             # Decode reset token
             payload = decode_access_token(
@@ -451,7 +454,10 @@ class AuthService:
                 settings.JWT_ALGORITHM
             )
             
-            user_id = int(payload.get("sub"))
+            user_id_str = payload.get("sub")
+            if not user_id_str:
+                raise UnauthorizedException(message="Invalid reset token")
+            user_id = int(user_id_str)
             purpose = payload.get("purpose")
             
             if purpose != "password_reset":
