@@ -1,0 +1,235 @@
+# ================================================================================
+# 05-auth-service - Git Ignore Configuration
+# ================================================================================
+# Gravity MicroServices Platform
+# ================================================================================
+
+# ================================================================================
+# Python
+# ================================================================================
+
+# Byte-compiled / optimized
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+
+# Virtual Environments
+venv/
+env/
+ENV/
+.venv/
+env.bak/
+venv.bak/
+.python-version
+
+# Distribution / packaging
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# Unit test / coverage reports
+htmlcov/
+.tox/
+.nox/
+.coverage
+.coverage.*
+.cache
+nosetests.xml
+coverage.xml
+*.cover
+*.py,cover
+.hypothesis/
+.pytest_cache/
+cover/
+
+# Type checking
+.mypy_cache/
+.dmypy.json
+dmypy.json
+.pyre/
+.pytype/
+.ruff_cache/
+
+# ================================================================================
+# IDEs and Editors
+# ================================================================================
+
+# VS Code
+.vscode/
+!.vscode/settings.json.example
+*.code-workspace
+
+# PyCharm
+.idea/
+*.iml
+*.iws
+
+# Vim
+*.swp
+*.swo
+*~
+
+# Sublime Text
+*.sublime-project
+*.sublime-workspace
+
+# ================================================================================
+# Operating System
+# ================================================================================
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+._*
+
+# Windows
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+*.lnk
+
+# Linux
+*~
+.directory
+.Trash-*
+
+# ================================================================================
+# Database
+# ================================================================================
+
+# SQLite
+*.db
+*.sqlite
+*.sqlite3
+*.sql.backup
+
+# PostgreSQL
+pgdata/
+postgres-data/
+
+# Redis
+dump.rdb
+
+# ================================================================================
+# Docker
+# ================================================================================
+
+docker-compose.override.yml
+docker-compose.local.yml
+
+# ================================================================================
+# Environment & Secrets
+# ================================================================================
+
+# Environment files (NEVER commit real .env!)
+.env
+.env.*
+!.env.example
+.env.local
+.env.development
+.env.test
+.env.production
+
+# Secrets
+secrets/
+credentials/
+*.pem
+*.key
+*.crt
+*.cer
+*.p12
+*.pfx
+service-account.json
+
+# ================================================================================
+# Logs and Temp
+# ================================================================================
+
+# Logs
+logs/
+*.log
+*.log.*
+log/
+
+# Temporary files
+tmp/
+temp/
+cache/
+*.tmp
+*.temp
+*.bak
+*.backup
+*.old
+*.orig
+
+# Backup files from scripts
+*.py.backup
+*.yaml.backup
+*.yml.backup
+*.json.backup
+*.toml.backup
+*.md.backup
+config.py.backup
+
+# ================================================================================
+# Application Specific
+# ================================================================================
+
+# Uploads and media
+uploads/
+media/
+static/collected_static/
+
+# Data directories
+data/
+
+# Backups
+backups/
+
+# Alembic
+alembic/versions/__pycache__/
+
+# ================================================================================
+# CI/CD
+# ================================================================================
+
+# GitHub Actions
+.github/workflows/*.log
+
+# ================================================================================
+# Kubernetes
+# ================================================================================
+
+k8s/secrets/
+k8s/*.secret.yaml
+k8s/*-secret.yaml
+
+# ================================================================================
+# Keep These Files (Explicitly NOT ignored)
+# ================================================================================
+
+!.env.example
+!.vscode/settings.json.example
+!config.example.py
+!README.md
+!LICENSE
+!CHANGELOG.md
+!CONTRIBUTING.md
+!docs/**/*.md
